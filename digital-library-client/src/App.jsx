@@ -1,5 +1,6 @@
 import './App.css'
 import { Routes, Route, Link } from 'react-router-dom'
+import NewBookPage from './pages/NewBookPage.jsx'
 
 function Home() {
   return (
@@ -13,15 +14,11 @@ function Home() {
   )
 }
 
-function NewBookPlaceholder() {
-  return <div className="card"><h2>Register a Book</h2><p>Form coming soon.</p></div>
-}
-
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/books/new" element={<NewBookPlaceholder />} />
+  <Route path="/books/new" element={<NewBookPage />} />
     </Routes>
   )
 }
