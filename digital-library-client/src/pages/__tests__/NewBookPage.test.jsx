@@ -21,19 +21,19 @@ describe('NewBookPage', () => {
     expect(screen.getByLabelText(/Title/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Author/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Category/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Save Book/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /Save Book/i })).toBeEnabled()
   })
 
   it('shows validation errors on submit when empty', async () => {
     const user = userEvent.setup()
     const saveBtn = screen.getByRole('button', { name: /Save Book/i })
     await user.click(saveBtn)
-    expect(await screen.findByText('Title is required')).toBeInTheDocument()
-    expect(screen.getByText('Author is required')).toBeInTheDocument()
-    expect(screen.getByText('Category is required')).toBeInTheDocument()
+  expect(await screen.findByText('Title is required')).toBeInTheDocument()
+  expect(screen.getByText('Author is required')).toBeInTheDocument()
+  expect(screen.getByText('Category is required')).toBeInTheDocument()
   })
 
-  it('enables submit when form is valid and submits', async () => {
+  it('submits when form is valid', async () => {
     // re-render to have clean state
     // The beforeEach already did, so continuing
     const user = userEvent.setup()
@@ -45,7 +45,7 @@ describe('NewBookPage', () => {
     await user.selectOptions(category, 'Technology')
 
     const saveBtn = screen.getByRole('button', { name: /Save Book/i })
-    expect(saveBtn).toBeEnabled()
+  expect(saveBtn).toBeEnabled()
 
     // Spy on alert
     const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {})
@@ -54,13 +54,14 @@ describe('NewBookPage', () => {
     alertSpy.mockRestore()
   })
 
-  it('displays per-field errors only after blur or submit', async () => {
+  it('displays field-specific error after blur without showing others', async () => {
     const user = userEvent.setup()
     const title = screen.getByLabelText(/Title/i)
     await user.click(title)
-    await user.tab() // move focus away to trigger blur
+    await user.tab() // blur
     expect(screen.getByText('Title is required')).toBeInTheDocument()
-    // Author not touched yet
-    expect(screen.queryByText('Author is required')).not.toBeNull()
+    // Other errors should not appear before submit or blur
+    expect(screen.queryByText('Author is required')).toBeNull()
+    expect(screen.queryByText('Category is required')).toBeNull()
   })
 })

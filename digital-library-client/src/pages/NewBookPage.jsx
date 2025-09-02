@@ -77,7 +77,7 @@ export default function NewBookPage() {
           </select>
           {(touched.category || submitted) && errors.category && <div id="category-error" style={{ color: 'crimson', fontSize: '0.8rem' }}>{errors.category}</div>}
         </div>
-        <button type="submit" disabled={!isValid}>Save Book</button>
+  <button type="submit">Save Book</button>
       </form>
       <p style={{ marginTop: '1rem' }}><Link to="/">Back to Home</Link></p>
     </div>
