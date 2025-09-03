@@ -13,7 +13,7 @@ export default function LibraryLayout() {
         </div>
         <nav>
           <NavLink to="/" end className={({isActive})=> isActive ? 'active' : undefined}>Tablero</NavLink>
-          <NavLink to="/books" className={({isActive})=> isActive ? 'active' : undefined}>Libros Disponibles</NavLink>
+          <NavLink to="/books" end className={({isActive})=> isActive ? 'active' : undefined}>Libros Disponibles</NavLink>
           <NavLink to="/search" className={({isActive})=> isActive ? 'active' : undefined}>Busqueda Avanzada</NavLink>
           <NavLink to="/loans" className={({isActive})=> isActive ? 'active' : undefined}>Libros Prestados</NavLink>
           <NavLink to="/books/new" className={({isActive})=> isActive ? 'active' : undefined}>Registrar Libro</NavLink>
