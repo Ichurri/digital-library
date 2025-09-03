@@ -37,9 +37,13 @@ export default function NewBookPage() {
     setTouched(prev => ({ ...prev, [name]: true }))
   }
 
-  function handleSubmit(e) {
+  const [apiError, setApiError] = useState(null)
+  const [apiSuccess, setApiSuccess] = useState(null)
+  async function handleSubmit(e) {
     e.preventDefault()
     setSubmitted(true)
+    setApiError(null)
+    setApiSuccess(null)
     if (!isValid) {
       // focus first error field
       const firstErrorField = ['title','author','category'].find(f => errors[f])
@@ -48,13 +52,31 @@ export default function NewBookPage() {
       }
       return
     }
-    console.log('Submitting new book', form)
-    alert('Book submitted (demo).')
+    try {
+      const res = await fetch('http://localhost:4000/api/books', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setApiError(data.error || 'Unknown error')
+      } else {
+        setApiSuccess('Book registered successfully!')
+        setForm({ title: '', author: '', category: '' })
+        setTouched({})
+        setSubmitted(false)
+      }
+    } catch (err) {
+      setApiError('Network error: ' + err.message)
+    }
   }
 
   return (
     <div className="card" style={{ maxWidth: 480 }}>
       <h2>Register a Book</h2>
+      {apiError && <div style={{ color: 'crimson', marginBottom: '0.5rem' }}>{apiError}</div>}
+      {apiSuccess && <div style={{ color: 'green', marginBottom: '0.5rem' }}>{apiSuccess}</div>}
       <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         <div>
           <label htmlFor="title">Title</label><br />
