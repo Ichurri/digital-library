@@ -1,12 +1,23 @@
 // Controller for books endpoints
+import { insertBook, findCategoryByName } from '../models/booksModel.js';
+
 export async function createBook(req, res, next) {
   try {
-    // Extract fields from request body
     const { title, author, category } = req.body;
-    // Placeholder: no DB logic yet
+    // Validation: all fields required
+    if (!title || !author || !category) {
+      return res.status(400).json({ error: 'Title, author, and category are required.' });
+    }
+    // Check category exists
+    const categoryRow = await findCategoryByName(category);
+    if (!categoryRow) {
+      return res.status(400).json({ error: `Category '${category}' does not exist.` });
+    }
+    // Insert book
+    const book = await insertBook({ title, author, category_id: categoryRow.id });
     res.status(201).json({
-      message: 'Book received (not stored yet)',
-      book: { title, author, category }
+      message: 'Book registered successfully.',
+      book
     });
   } catch (err) {
     next(err);
