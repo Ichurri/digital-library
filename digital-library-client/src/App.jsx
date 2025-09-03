@@ -1,7 +1,7 @@
 import './App.css'
 import { Routes, Route, Link } from 'react-router-dom'
 import NewBookPage from './pages/NewBookPage.jsx'
-import BooksListPage from './pages/BooksListPage.jsx'
+import BooksPage from './pages/BooksPage.jsx'
 import LibraryLayout from './layout/LibraryLayout.jsx'
 
 function Home() {
@@ -21,7 +21,7 @@ export default function App() {
     <Routes>
       <Route element={<LibraryLayout />}> 
         <Route path="/" element={<Home />} />
-  <Route path="/books" element={<BooksListPage />} />
+  <Route path="/books" element={<BooksPage />} />
   <Route path="/books/new" element={<NewBookPage />} />
       </Route>
     </Routes>
