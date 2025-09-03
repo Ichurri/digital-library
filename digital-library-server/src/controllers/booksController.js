@@ -1,4 +1,5 @@
 import { updateBookStatus } from '../models/booksModel.js';
+import { getBooksByStatus } from '../models/booksModel.js';
 
 // Change book status: loan or return
 export async function changeBookStatus(req, res, next) {
@@ -54,5 +55,25 @@ export async function createBook(req, res, next) {
     });
   } catch (err) {
     next(err);
+  }
+}
+
+
+export async function listBooksByStatus(req, res) {
+  const status = req.query.status || 'borrowed';
+  try {
+    const books = await getBooksByStatus(status);
+    res.json({ books });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch books by status' });
+  }
+}
+
+export async function listCategories(req, res) {
+  try {
+    const categories = await getAllCategories();
+    res.json({ categories });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch categories' });
   }
 }

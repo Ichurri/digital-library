@@ -14,18 +14,18 @@ export default function LibraryLayout() {
         <nav>
           <NavLink to="/" end className={({isActive})=> isActive ? 'active' : undefined}>Dashboard</NavLink>
           <NavLink to="/books" end className={({isActive})=> isActive ? 'active' : undefined}>Available Books</NavLink>
-          <NavLink to="/search" className={({isActive})=> isActive ? 'active' : undefined}>Advanced Search</NavLink>
+          {/* <NavLink to="/search" className={({isActive})=> isActive ? 'active' : undefined}>Advanced Search</NavLink> */}
           <NavLink to="/loans" className={({isActive})=> isActive ? 'active' : undefined}>Borrowed Books</NavLink>
           <NavLink to="/books/new" className={({isActive})=> isActive ? 'active' : undefined}>Register Book</NavLink>
         </nav>
       </aside>
       <div className="main-area">
-        <header className="topbar">
+        {/* <header className="topbar">
           <div className="search-bar">
             <input type="text" placeholder="Quick search by title" aria-label="Search by title" />
             <button type="button">Search</button>
           </div>
-        </header>
+        </header> */}
         <main className="content">
           <Outlet />
         </main>

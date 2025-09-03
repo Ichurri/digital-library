@@ -3,6 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import NewBookPage from './pages/NewBookPage.jsx'
 import BooksPage from './pages/BooksPage.jsx'
 import LibraryLayout from './layout/LibraryLayout.jsx'
+import BorrowedBooks from './pages/BorrowedBooks.jsx'
 
 function Home() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
   <Route path="/books" element={<BooksPage />} />
   <Route path="/books/new" element={<NewBookPage />} />
+  <Route path="/loans" element={<BorrowedBooks />} />
       </Route>
     </Routes>
   )

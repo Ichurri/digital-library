@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { createBook, listBooks, changeBookStatus } from '../controllers/booksController.js';
+import { createBook, listBooks, changeBookStatus, listBooksByStatus } from '../controllers/booksController.js';
+import { listCategories } from '../controllers/booksController.js';
 
 const router = Router();
 
@@ -18,7 +19,12 @@ router.post('/:id/return', (req, res, next) => {
 	next();
 }, changeBookStatus);
 
-export default router;
-
 // POST /api/books — create a new book
 router.post('/', createBook);
+
+router.get('/loans', listBooksByStatus);
+
+router.get('/', listCategories);
+
+export default router;
+
