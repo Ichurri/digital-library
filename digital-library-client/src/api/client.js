@@ -30,3 +30,12 @@ export async function apiGet(path, options = {}) {
   }
   return json;
 }
+
+// Domain specific helpers
+export function loanBook(id) {
+  return apiPost(`/books/${id}/loan`, {});
+}
+
+export function returnBook(id) {
+  return apiPost(`/books/${id}/return`, {});
+}
