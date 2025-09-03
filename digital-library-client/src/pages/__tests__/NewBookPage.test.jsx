@@ -34,8 +34,6 @@ describe('NewBookPage', () => {
   })
 
   it('submits when form is valid', async () => {
-    // re-render to have clean state
-    // The beforeEach already did, so continuing
     const user = userEvent.setup()
     const title = screen.getByLabelText(/Title/i)
     const author = screen.getByLabelText(/Author/i)
@@ -43,15 +41,14 @@ describe('NewBookPage', () => {
     await user.type(title, 'Clean Code')
     await user.type(author, 'Robert C. Martin')
     await user.selectOptions(category, 'Technology')
-
     const saveBtn = screen.getByRole('button', { name: /Save Book/i })
-  expect(saveBtn).toBeEnabled()
-
-    // Spy on alert
-    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {})
+    expect(saveBtn).toBeEnabled()
+    // Mock fetch for POST
+    const originalFetch = global.fetch
+    global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ message: 'Book registered.' }) }))
     await user.click(saveBtn)
-    expect(alertSpy).toHaveBeenCalled()
-    alertSpy.mockRestore()
+    expect(await screen.findByText(/Book registered\./i)).toBeInTheDocument()
+    global.fetch = originalFetch
   })
 
   it('displays field-specific error after blur without showing others', async () => {
