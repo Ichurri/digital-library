@@ -3,7 +3,8 @@ import { insertBook, findCategoryByName, getAllBooks } from '../models/booksMode
 // List all books
 export async function listBooks(req, res, next) {
   try {
-    const books = await getAllBooks();
+    const { query, author, category } = req.query;
+    const books = await getAllBooks({ query, author, category });
     res.json({ books });
   } catch (err) {
     next(err);
