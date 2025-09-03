@@ -1,3 +1,26 @@
+import { updateBookStatus } from '../models/booksModel.js';
+
+// Change book status: loan or return
+export async function changeBookStatus(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+    const action = req.action;
+    if (!id || !['loan','return'].includes(action)) {
+      return res.status(400).json({ error: 'Invalid request' });
+    }
+    const status = action === 'loan' ? 'borrowed' : 'available';
+    const result = await updateBookStatus(id, status);
+    if (!result) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    if (action === 'loan' && result.status === 'borrowed') {
+      return res.status(400).json({ error: 'Book is already lent' });
+    }
+    res.json({ message: `Book marked as ${status}`, book: result });
+  } catch (err) {
+    next(err);
+  }
+}
 // Controller for books endpoints
 import { insertBook, findCategoryByName, getAllBooks } from '../models/booksModel.js';
 // List all books

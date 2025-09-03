@@ -1,3 +1,12 @@
+// Update book status
+export async function updateBookStatus(id, status) {
+	// Only update if status is different
+	const res = await pool.query(
+		'UPDATE books SET status=$2 WHERE id=$1 AND status<>$2 RETURNING id, title, author, status',
+		[id, status]
+	);
+	return res.rows[0];
+}
 // Get all books
 export async function getAllBooks({ query, author, category } = {}) {
 	let sql = `SELECT b.id, b.title, b.author, b.status, c.name AS category
