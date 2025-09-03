@@ -10,7 +10,18 @@ router.post('/:id/return', (req, res, next) => {
 	next();
 }, require('../controllers/booksController.js').changeBookStatus);
 import { Router } from 'express';
-import { createBook, listBooks } from '../controllers/booksController.js';
+import { createBook, listBooks, changeBookStatus } from '../controllers/booksController.js';
+// POST /api/books/:id/loan — mark book as borrowed
+router.post('/:id/loan', (req, res, next) => {
+	req.action = 'loan';
+	next();
+}, changeBookStatus);
+
+// POST /api/books/:id/return — mark book as available
+router.post('/:id/return', (req, res, next) => {
+	req.action = 'return';
+	next();
+}, changeBookStatus);
 
 const router = Router();
 
