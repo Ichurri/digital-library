@@ -1,11 +1,27 @@
 // Get all books
-export async function getAllBooks() {
-	const result = await pool.query(
-		`SELECT b.id, b.title, b.author, b.status, c.name AS category
-		 FROM books b
-		 JOIN categories c ON b.category_id = c.id
-		 ORDER BY b.id DESC`
-	);
+export async function getAllBooks({ query, author, category } = {}) {
+	let sql = `SELECT b.id, b.title, b.author, b.status, c.name AS category
+						 FROM books b
+						 JOIN categories c ON b.category_id = c.id`;
+	const clauses = [];
+	const params = [];
+	if (query) {
+		clauses.push('b.title ILIKE $' + (params.length + 1));
+		params.push(`%${query}%`);
+	}
+	if (author) {
+		clauses.push('b.author ILIKE $' + (params.length + 1));
+		params.push(`%${author}%`);
+	}
+	if (category) {
+		clauses.push('c.name = $' + (params.length + 1));
+		params.push(category);
+	}
+	if (clauses.length) {
+		sql += ' WHERE ' + clauses.join(' AND ');
+	}
+	sql += ' ORDER BY b.id DESC';
+	const result = await pool.query(sql, params);
 	return result.rows;
 }
 import pool from '../db/pool.js';
