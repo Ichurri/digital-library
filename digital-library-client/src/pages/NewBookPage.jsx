@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { apiPost } from '../api/client.js'
 
 /*
  * NewBookPage
@@ -41,6 +42,8 @@ export default function NewBookPage() {
 
   const [apiError, setApiError] = useState(null)
   const [apiSuccess, setApiSuccess] = useState(null)
+  const [loading, setLoading] = useState(false)
+
   async function handleSubmit(e) {
     e.preventDefault()
     setSubmitted(true)
@@ -53,11 +56,18 @@ export default function NewBookPage() {
       }
       return
     }
-    // Placeholder success (still local until backend integration stable)
-    setApiSuccess('Libro registrado (demo).')
-    setForm({ title: '', author: '', category: '' })
-    setTouched({})
-    setSubmitted(false)
+    try {
+      setLoading(true)
+      const data = await apiPost('/books', form)
+      setApiSuccess(data.message || 'Libro registrado.')
+      setForm({ title: '', author: '', category: '' })
+      setTouched({})
+      setSubmitted(false)
+    } catch (err) {
+      setApiError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -91,7 +101,7 @@ export default function NewBookPage() {
           </div>
         </div>
         <div style={{marginTop:'var(--space-6)'}}>
-          <button type="submit">Guardar Libro</button>
+          <button type="submit" disabled={loading}>{loading ? 'Guardando...' : 'Guardar Libro'}</button>
         </div>
       </form>
     </div>
