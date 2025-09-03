@@ -59,7 +59,7 @@ export default function NewBookPage() {
     try {
       setLoading(true)
       const data = await apiPost('/books', form)
-      setApiSuccess(data.message || 'Libro registrado.')
+  setApiSuccess(data.message || 'Book registered.')
       setForm({ title: '', author: '', category: '' })
       setTouched({})
       setSubmitted(false)
@@ -72,36 +72,36 @@ export default function NewBookPage() {
 
   return (
     <div className="dl-card">
-      <h2 className="page-title">Registrar Nuevo Libro</h2>
-      <p className="page-subtitle">Complete la informacion del libro para agregarlo al inventario</p>
+  <h2 className="page-title">Register New Book</h2>
+  <p className="page-subtitle">Complete the book information to add it to the catalogue</p>
       {apiError && <div className="error-text" role="alert">{apiError}</div>}
       {apiSuccess && <div style={{color:'var(--color-primary)',fontSize:'.75rem',fontWeight:600,marginBottom:'8px'}} role="status">{apiSuccess}</div>}
       <form onSubmit={handleSubmit} noValidate>
         <div className="form-grid-2">
           <div>
-            <label htmlFor="author">Autor</label>
-            <input ref={refs.author} id="author" name="author" value={form.author} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.author} aria-describedby={errors.author ? 'author-error' : undefined} placeholder="Ej. Gabriel Garcia Marquez" />
+            <label htmlFor="author">Author</label>
+            <input ref={refs.author} id="author" name="author" value={form.author} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.author} aria-describedby={errors.author ? 'author-error' : undefined} placeholder="e.g. Gabriel Garcia Marquez" />
             {(touched.author || submitted) && errors.author && <div id="author-error" className="error-text">{errors.author}</div>}
           </div>
           <div>
-            <label htmlFor="title">Titulo</label>
-            <input ref={refs.title} id="title" name="title" value={form.title} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.title} aria-describedby={errors.title ? 'title-error' : undefined} placeholder="Ej. Cien Años de Soledad" />
+            <label htmlFor="title">Title</label>
+            <input ref={refs.title} id="title" name="title" value={form.title} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.title} aria-describedby={errors.title ? 'title-error' : undefined} placeholder="e.g. One Hundred Years of Solitude" />
             {(touched.title || submitted) && errors.title && <div id="title-error" className="error-text">{errors.title}</div>}
           </div>
           <div>
-            <label htmlFor="category">Categoria</label>
+            <label htmlFor="category">Category</label>
             <select ref={refs.category} id="category" name="category" value={form.category} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.category} aria-describedby={errors.category ? 'category-error' : undefined}>
-              <option value="">Seleccionar Categoria</option>
-              <option value="Fiction">Ficcion</option>
-              <option value="Science">Ciencia</option>
-              <option value="History">Historia</option>
-              <option value="Technology">Tecnologia</option>
+              <option value="">Select Category</option>
+              <option value="Fiction">Fiction</option>
+              <option value="Science">Science</option>
+              <option value="History">History</option>
+              <option value="Technology">Technology</option>
             </select>
             {(touched.category || submitted) && errors.category && <div id="category-error" className="error-text">{errors.category}</div>}
           </div>
         </div>
         <div style={{marginTop:'var(--space-6)'}}>
-          <button type="submit" disabled={loading}>{loading ? 'Guardando...' : 'Guardar Libro'}</button>
+          <button type="submit" disabled={loading}>{loading ? 'Saving...' : 'Save Book'}</button>
         </div>
       </form>
     </div>
