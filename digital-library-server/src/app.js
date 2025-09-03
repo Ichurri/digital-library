@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import healthRouter from './routes/health.js';
 import booksRouter from './routes/books.js';
+import categoriesRouter from './routes/categories.js';
 
 const app = express();
 
@@ -13,6 +14,8 @@ app.use(express.json());
 app.use('/api/health', healthRouter);
 
 app.use('/api/books', booksRouter);
+
+app.use('/api/categories', categoriesRouter);
 
 // 404 handler
 app.use((req, res, next) => {

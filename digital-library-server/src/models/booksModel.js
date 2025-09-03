@@ -52,3 +52,16 @@ export async function insertBook({ title, author, category_id }) {
 	);
 	return result.rows[0];
 }
+
+export async function getBooksByStatus(status) {
+    const query = 'SELECT * FROM books WHERE status = $1';
+    const values = [status];
+    const { rows } = await pool.query(query, values);
+    return rows;
+}
+
+export async function getAllCategories() {
+  const query = 'SELECT id, name FROM categories ORDER BY name ASC';
+  const { rows } = await pool.query(query);
+  return rows;
+}
