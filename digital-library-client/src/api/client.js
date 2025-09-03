@@ -39,3 +39,7 @@ export function loanBook(id) {
 export function returnBook(id) {
   return apiPost(`/books/${id}/return`, {});
 }
+
+export function getBooksByStatus(status) {
+  return apiGet(`/books/loans?status=${encodeURIComponent(status)}`);
+}
