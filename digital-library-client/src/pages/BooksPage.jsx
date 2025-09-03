@@ -8,6 +8,7 @@ export default function BooksPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
+  const [category, setCategory] = useState(''); // task012 added category filter
 
   useEffect(() => {
     let isMounted = true;
@@ -26,20 +27,26 @@ export default function BooksPage() {
     return () => { isMounted = false; };
   }, []);
 
+  const categories = useMemo(() => {
+    const set = new Set();
+    books.forEach(b => { if (b.category) set.add(b.category); });
+    return Array.from(set).sort();
+  }, [books]);
+
   const filtered = useMemo(() => {
-    if (!query.trim()) return books;
-    const q = query.toLowerCase();
-    return books.filter(b =>
-      b.title?.toLowerCase().includes(q) ||
-      b.author?.toLowerCase().includes(q)
-    );
-  }, [books, query]);
+    const q = query.trim().toLowerCase();
+    return books.filter(b => {
+      const matchesQuery = !q || b.title?.toLowerCase().includes(q) || b.author?.toLowerCase().includes(q);
+      const matchesCategory = !category || b.category === category;
+      return matchesQuery && matchesCategory;
+    });
+  }, [books, query, category]);
 
   return (
     <div className="card">
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:16,flexWrap:'wrap'}}>
         <h2 style={{margin:0}}>Books</h2>
-        <div style={{display:'flex',gap:8}}>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
           <input
             type="text"
             placeholder="Search by title or author"
@@ -48,6 +55,15 @@ export default function BooksPage() {
             aria-label="Search books by title or author"
             style={{minWidth:240}}
           />
+          <select
+            aria-label="Filter by category"
+            value={category}
+            onChange={e=>setCategory(e.target.value)}
+            style={{minWidth:180}}
+          >
+            <option value="">All categories</option>
+            {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+          </select>
         </div>
       </div>
       <div style={{marginTop:16}}>
