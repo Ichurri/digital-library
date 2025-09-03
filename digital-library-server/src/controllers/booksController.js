@@ -13,7 +13,7 @@ export async function changeBookStatus(req, res, next) {
     if (!result) {
       return res.status(404).json({ error: 'Book not found' });
     }
-    if (action === 'loan' && result.status === 'borrowed') {
+    if (action === 'loan' && result.already) {
       return res.status(400).json({ error: 'Book is already lent' });
     }
     res.json({ message: `Book marked as ${status}`, book: result });
