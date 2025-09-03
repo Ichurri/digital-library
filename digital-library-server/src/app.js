@@ -1,5 +1,6 @@
 import express from 'express';
 import healthRouter from './routes/health.js';
+import booksRouter from './routes/books.js';
 
 const app = express();
 
@@ -8,6 +9,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/health', healthRouter);
+
+app.use('/api/books', booksRouter);
 
 // 404 handler
 app.use((req, res, next) => {
