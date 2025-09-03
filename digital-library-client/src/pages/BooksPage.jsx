@@ -102,7 +102,9 @@ export default function BooksPage() {
               </thead>
               <tbody>
                 {filtered.map(book => {
-                  const isBorrowed = book.status === 'borrowed';
+                  const rawStatus = book.status;
+                  const normalizedStatus = rawStatus === 'lent' ? 'borrowed' : rawStatus;
+                  const isBorrowed = normalizedStatus === 'borrowed';
                   const updating = book._updating;
                   return (
                     <tr key={book.id} style={{borderTop:'1px solid rgba(0,0,0,0.06)'}}>
