@@ -1,6 +1,7 @@
 import './App.css'
 import { Routes, Route, Link } from 'react-router-dom'
 import NewBookPage from './pages/NewBookPage.jsx'
+import LibraryLayout from './layout/LibraryLayout.jsx'
 
 function Home() {
   return (
@@ -17,8 +18,10 @@ function Home() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-  <Route path="/books/new" element={<NewBookPage />} />
+      <Route element={<LibraryLayout />}> 
+        <Route path="/" element={<Home />} />
+        <Route path="/books/new" element={<NewBookPage />} />
+      </Route>
     </Routes>
   )
 }
