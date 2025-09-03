@@ -1,3 +1,13 @@
+// Get all books
+export async function getAllBooks() {
+	const result = await pool.query(
+		`SELECT b.id, b.title, b.author, b.status, c.name AS category
+		 FROM books b
+		 JOIN categories c ON b.category_id = c.id
+		 ORDER BY b.id DESC`
+	);
+	return result.rows;
+}
 import pool from '../db/pool.js';
 
 // Find category by name

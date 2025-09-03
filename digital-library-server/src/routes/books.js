@@ -1,9 +1,13 @@
 import { Router } from 'express';
-import { createBook } from '../controllers/booksController.js';
+import { createBook, listBooks } from '../controllers/booksController.js';
 
 const router = Router();
 
-// POST /api/books — create a new book (no DB logic yet)
+
+// GET /api/books — list all books
+router.get('/', listBooks);
+
+// POST /api/books — create a new book
 router.post('/', createBook);
 
 export default router;

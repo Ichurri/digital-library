@@ -1,5 +1,14 @@
 // Controller for books endpoints
-import { insertBook, findCategoryByName } from '../models/booksModel.js';
+import { insertBook, findCategoryByName, getAllBooks } from '../models/booksModel.js';
+// List all books
+export async function listBooks(req, res, next) {
+  try {
+    const books = await getAllBooks();
+    res.json({ books });
+  } catch (err) {
+    next(err);
+  }
+}
 
 export async function createBook(req, res, next) {
   try {
