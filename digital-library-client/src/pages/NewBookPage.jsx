@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { apiPost } from '../api/client.js'
 
 /*
  * NewBookPage
@@ -42,13 +42,14 @@ export default function NewBookPage() {
 
   const [apiError, setApiError] = useState(null)
   const [apiSuccess, setApiSuccess] = useState(null)
+  const [loading, setLoading] = useState(false)
+
   async function handleSubmit(e) {
     e.preventDefault()
     setSubmitted(true)
     setApiError(null)
     setApiSuccess(null)
     if (!isValid) {
-      // focus first error field
       const firstErrorField = ['title','author','category'].find(f => errors[f])
       if (firstErrorField && refs[firstErrorField].current) {
         refs[firstErrorField].current.focus()
@@ -56,55 +57,53 @@ export default function NewBookPage() {
       return
     }
     try {
-      const res = await fetch('http://localhost:4000/api/books', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        setApiError(data.error || 'Unknown error')
-      } else {
-        setApiSuccess('Book registered successfully!')
-        setForm({ title: '', author: '', category: '' })
-        setTouched({})
-        setSubmitted(false)
-      }
+      setLoading(true)
+      const data = await apiPost('/books', form)
+      setApiSuccess(data.message || 'Libro registrado.')
+      setForm({ title: '', author: '', category: '' })
+      setTouched({})
+      setSubmitted(false)
     } catch (err) {
-      setApiError('Network error: ' + err.message)
+      setApiError(err.message)
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <div className="card" style={{ maxWidth: 480 }}>
-      <h2>Register a Book</h2>
-  {apiError && <div role="alert" style={{ color: 'crimson', marginBottom: '0.5rem' }}>{apiError}</div>}
-  {apiSuccess && <div role="status" style={{ color: 'green', marginBottom: '0.5rem' }}>{apiSuccess}</div>}
-      <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-        <div>
-          <label htmlFor="title">Title</label><br />
-          <input ref={refs.title} id="title" name="title" value={form.title} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.title} aria-describedby={errors.title ? 'title-error' : undefined} placeholder="e.g. The Pragmatic Programmer" />
-          {(touched.title || submitted) && errors.title && <div id="title-error" style={{ color: 'crimson', fontSize: '0.8rem' }}>{errors.title}</div>}
+    <div className="dl-card">
+      <h2 className="page-title">Registrar Nuevo Libro</h2>
+      <p className="page-subtitle">Complete la informacion del libro para agregarlo al inventario</p>
+      {apiError && <div className="error-text" role="alert">{apiError}</div>}
+      {apiSuccess && <div style={{color:'var(--color-primary)',fontSize:'.75rem',fontWeight:600,marginBottom:'8px'}} role="status">{apiSuccess}</div>}
+      <form onSubmit={handleSubmit} noValidate>
+        <div className="form-grid-2">
+          <div>
+            <label htmlFor="author">Autor</label>
+            <input ref={refs.author} id="author" name="author" value={form.author} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.author} aria-describedby={errors.author ? 'author-error' : undefined} placeholder="Ej. Gabriel Garcia Marquez" />
+            {(touched.author || submitted) && errors.author && <div id="author-error" className="error-text">{errors.author}</div>}
+          </div>
+          <div>
+            <label htmlFor="title">Titulo</label>
+            <input ref={refs.title} id="title" name="title" value={form.title} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.title} aria-describedby={errors.title ? 'title-error' : undefined} placeholder="Ej. Cien Años de Soledad" />
+            {(touched.title || submitted) && errors.title && <div id="title-error" className="error-text">{errors.title}</div>}
+          </div>
+          <div>
+            <label htmlFor="category">Categoria</label>
+            <select ref={refs.category} id="category" name="category" value={form.category} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.category} aria-describedby={errors.category ? 'category-error' : undefined}>
+              <option value="">Seleccionar Categoria</option>
+              <option value="Fiction">Ficcion</option>
+              <option value="Science">Ciencia</option>
+              <option value="History">Historia</option>
+              <option value="Technology">Tecnologia</option>
+            </select>
+            {(touched.category || submitted) && errors.category && <div id="category-error" className="error-text">{errors.category}</div>}
+          </div>
         </div>
-        <div>
-          <label htmlFor="author">Author</label><br />
-          <input ref={refs.author} id="author" name="author" value={form.author} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.author} aria-describedby={errors.author ? 'author-error' : undefined} placeholder="e.g. Andrew Hunt" />
-          {(touched.author || submitted) && errors.author && <div id="author-error" style={{ color: 'crimson', fontSize: '0.8rem' }}>{errors.author}</div>}
+        <div style={{marginTop:'var(--space-6)'}}>
+          <button type="submit" disabled={loading}>{loading ? 'Guardando...' : 'Guardar Libro'}</button>
         </div>
-        <div>
-          <label htmlFor="category">Category</label><br />
-          <select ref={refs.category} id="category" name="category" value={form.category} onChange={handleChange} onBlur={handleBlur} aria-invalid={!!errors.category} aria-describedby={errors.category ? 'category-error' : undefined}>
-            <option value="">-- Select Category --</option>
-            <option value="Fiction">Fiction</option>
-            <option value="Science">Science</option>
-            <option value="History">History</option>
-            <option value="Technology">Technology</option>
-          </select>
-          {(touched.category || submitted) && errors.category && <div id="category-error" style={{ color: 'crimson', fontSize: '0.8rem' }}>{errors.category}</div>}
-        </div>
-  <button type="submit">Save Book</button>
       </form>
-      <p style={{ marginTop: '1rem' }}><Link to="/">Back to Home</Link></p>
     </div>
   )
 }
