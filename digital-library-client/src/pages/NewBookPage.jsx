@@ -30,6 +30,9 @@ export default function NewBookPage() {
   function handleChange(e) {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
+    // Clear feedback on change
+    setApiError(null)
+    setApiSuccess(null)
   }
 
   function handleBlur(e) {
@@ -75,8 +78,8 @@ export default function NewBookPage() {
   return (
     <div className="card" style={{ maxWidth: 480 }}>
       <h2>Register a Book</h2>
-      {apiError && <div style={{ color: 'crimson', marginBottom: '0.5rem' }}>{apiError}</div>}
-      {apiSuccess && <div style={{ color: 'green', marginBottom: '0.5rem' }}>{apiSuccess}</div>}
+  {apiError && <div role="alert" style={{ color: 'crimson', marginBottom: '0.5rem' }}>{apiError}</div>}
+  {apiSuccess && <div role="status" style={{ color: 'green', marginBottom: '0.5rem' }}>{apiSuccess}</div>}
       <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         <div>
           <label htmlFor="title">Title</label><br />
