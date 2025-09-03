@@ -141,6 +141,29 @@ label { font-weight: 600; font-size: 0.8rem; letter-spacing: .4px; text-transfor
 .page-title { display: flex; align-items: center; gap: var(--space-3); margin: 0 0 var(--space-2); font-size: 1.3rem; }
 .page-subtitle { margin: 0 0 var(--space-6); font-size: .75rem; letter-spacing: .5px; color: var(--color-text-light); }
 
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; flex-direction: row; align-items: center; overflow-x: auto; }
+  .sidebar nav { flex-direction: row; flex-wrap: wrap; }
+  .sidebar a { font-size: .7rem; padding: 6px 8px; }
+  .content { padding: var(--space-6); }
+}
+
+@media (max-width: 780px) {
+  .form-grid-2 { grid-template-columns: 1fr; }
+  .topbar { padding: var(--space-3) var(--space-4); }
+  .content { padding: var(--space-5); }
+  .dl-card { padding: var(--space-5); }
+  .page-title { font-size: 1.1rem; }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root { --color-bg: #0f1d21; --color-bg-alt:#1d2c30; --color-text:#f3f7f8; --color-text-light:#9fb3b8; --color-border:#244046; }
+  .sidebar { background: #1f5e5d; }
+  button { border-color: var(--color-primary); }
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
